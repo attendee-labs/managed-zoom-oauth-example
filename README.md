@@ -3,7 +3,7 @@
 A simple Node.js web application demonstrating how to use Attendee's managed Zoom OAuth feature.
 
 This feature handles the process of managing Zoom OAuth connections and tokens for you. Currently it supports two capabilities:
-1. Local recording token - This token allows the bot to record the meeting without asking permission and bypassing the waiting room. The meeting host must have authorized the app.
+1. Local recording token - This token allows the bot to bypass the waiting room and record the meeting without asking permission. The meeting host must have authorized the app.
 2. Onbehalf token - This token associates the bot with a user in the meeting. The bot will not be able to join the meeting until this user joins. It will soon be required for any external meeting. See [here](https://developers.zoom.us/blog/transition-to-obf-token-meetingsdk-apps/) for details. 
 
 ## Setup
