@@ -10,19 +10,18 @@ A simple Node.js web application demonstrating how to use Attendee's managed zoo
    ```
 
 2. **Create a Zoom OAuth App:**
-1. Go to the [Zoom Developer Portal](https://marketplace.zoom.us/user/build) and create a new General app.
-
-2. On the sidebar select 'Basic Information'.
-3. For the OAuth redirect URL, enter `http://localhost:5005/zoom_oauth_callback`.
-4. On the sidebar select 'Features -> Embed'.
-5. Toggle 'Meeting SDK' to on.
-6. On the sidebar select 'Scopes'.
-7. Add the following scopes if you want to use the local recording token:
-    - `user:read:user`
-    - `meeting:read:list_meetings`
-    - `meeting:read:local_recording_token`
-8. Add the following scope if you want to use the onbehalf token:
-    - `user:read:token`
+   1. Go to the [Zoom Developer Portal](https://marketplace.zoom.us/user/build) and create a new General app.
+   2. On the sidebar select 'Basic Information'.
+   3. For the OAuth redirect URL, enter `http://localhost:5005/zoom_oauth_callback`.
+   4. On the sidebar select 'Features -> Embed'.
+   5. Toggle 'Meeting SDK' to on.
+   6. On the sidebar select 'Scopes'.
+   7. Add the following scopes if you want to use the local recording token:
+      - `user:read:user`
+      - `meeting:read:list_meetings`
+      - `meeting:read:local_recording_token`
+   8. Add the following scope if you want to use the onbehalf token:
+      - `user:read:token`
 
 3. **Configure environment variables:**
    ```bash
