@@ -11,7 +11,7 @@ const path = require('path');
 const db = require('./db');
 
 // Configuration
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5005;
 const CLIENT_ID = process.env.ZOOM_CLIENT_ID;
 const CLIENT_SECRET = process.env.ZOOM_CLIENT_SECRET;
 const ATTENDEE_API_KEY = process.env.ATTENDEE_API_KEY;
@@ -215,6 +215,64 @@ app.post('/api/launch-bot', async (req, res) => {
 
     // Handle other errors
     res.status(500).json({ error: error.message });
+  }
+});
+
+// Attendee webhook endpoint for connection state changes
+app.post('/attendee-webhook', async (req, res) => {
+  try {
+    const webhookData = req.body;
+
+    console.log('Received webhook:', JSON.stringify(webhookData, null, 2));
+
+    // Verify this is a zoom_oauth_connection state change event
+    if (webhookData.trigger !== 'zoom_oauth_connection.state_change') {
+      console.log(`Ignoring webhook with trigger: ${webhookData.trigger}`);
+      return res.status(200).json({ message: 'Webhook received but not processed' });
+    }
+
+    const userId = webhookData.user_id;
+    const connectionId = webhookData.zoom_oauth_connection_id;
+    const stateData = webhookData.data;
+
+    if (!userId) {
+      console.error('No user_id in webhook data');
+      return res.status(400).json({ error: 'Missing user_id' });
+    }
+
+    // Get existing user data
+    const existingUser = db.getUser(userId);
+
+    if (!existingUser) {
+      console.log(`User ${userId} not found in database, skipping update`);
+      // Still return 200 to acknowledge receipt
+      return res.status(200).json({ message: 'User not found, webhook acknowledged' });
+    }
+
+    // Update user's connection data with the new state
+    const updatedConnectionData = {
+      ...existingUser,
+      state: stateData.state,
+      last_attempted_sync_at: stateData.last_attempted_sync_at,
+      last_successful_sync_at: stateData.last_successful_sync_at,
+      connection_failure_data: stateData.connection_failure_data
+    };
+
+    db.saveUser(userId, updatedConnectionData);
+
+    console.log(`Updated connection state for user ${userId} to: ${stateData.state}`);
+
+    if (stateData.state === 'disconnected' && stateData.connection_failure_data) {
+      console.error(`Connection failed for user ${userId}:`, stateData.connection_failure_data);
+    }
+
+    // Return 200 to acknowledge successful processing
+    res.status(200).json({ message: 'Webhook processed successfully' });
+
+  } catch (error) {
+    console.error('Error processing webhook:', error);
+    // Still return 200 to prevent webhook retries for processing errors
+    res.status(200).json({ message: 'Webhook received but error occurred during processing' });
   }
 });
 

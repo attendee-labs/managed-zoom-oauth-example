@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In - Zoom OAuth Demo</title>
+  <title>Attendee Managed Zoom OAuth Example</title>
   <style>
     * {
       margin: 0;
@@ -23,42 +23,38 @@
 
     .container {
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-      padding: 60px 40px;
-      max-width: 400px;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      padding: 40px 32px;
+      max-width: 360px;
       width: 100%;
       text-align: center;
     }
 
-    h1 {
-      font-size: 28px;
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
       color: #333;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     p {
-      color: #666;
-      font-size: 16px;
-      margin-bottom: 40px;
-    }
-
-    .zoom-logo {
-      font-size: 64px;
-      margin-bottom: 20px;
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 24px;
     }
 
     .sign-in-btn {
       background: #2D8CFF;
       color: white;
       border: none;
-      padding: 16px 32px;
-      font-size: 16px;
+      padding: 12px 24px;
+      font-size: 14px;
       font-weight: 600;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       width: 100%;
-      transition: background 0.3s ease;
+      transition: background 0.2s ease;
       text-decoration: none;
       display: inline-block;
     }
@@ -70,23 +66,13 @@
     .sign-in-btn:active {
       transform: scale(0.98);
     }
-
-    .footer {
-      margin-top: 30px;
-      font-size: 14px;
-      color: #999;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="zoom-logo">📹</div>
-    <h1>Welcome</h1>
-    <p>Sign in with your Zoom account to continue</p>
-    <a href="/zoom_oauth" class="sign-in-btn">Sign in with Zoom</a>
-    <div class="footer">
-      Powered by Attendee's Managed OAuth
-    </div>
+    <h3>Attendee Managed Zoom OAuth Example</h3>
+    <br>
+    <a href="/zoom_oauth" class="sign-in-btn">Connect your Zoom account</a>
   </div>
 </body>
 </html>

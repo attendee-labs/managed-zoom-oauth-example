@@ -46,11 +46,7 @@ function writeDB(data) {
 // Save user connection
 function saveUser(zoomUserId, connectionData) {
   const db = readDB();
-  db[zoomUserId] = {
-    ...connectionData,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  };
+  db[zoomUserId] = connectionData;
   return writeDB(db);
 }
 
