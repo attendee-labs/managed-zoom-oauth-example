@@ -16,7 +16,7 @@ const CLIENT_ID = process.env.ZOOM_CLIENT_ID;
 const CLIENT_SECRET = process.env.ZOOM_CLIENT_SECRET;
 const ATTENDEE_API_KEY = process.env.ATTENDEE_API_KEY;
 const REDIRECT_URI = process.env.REDIRECT_URI || `http://localhost:${PORT}/zoom_oauth_callback`;
-const ATTENDEE_API_URL = process.env.ATTENDEE_API_URL || 'https://staging.attendee.dev/api/v1';
+const ATTENDEE_API_URL = process.env.ATTENDEE_API_URL || 'https://app.attendee.dev';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'your-secret-key-change-in-production';
 const IS_LOCAL_RECORDING_TOKEN_SUPPORTED = process.env.IS_LOCAL_RECORDING_TOKEN_SUPPORTED === 'true';
 const IS_ONBEHALF_TOKEN_SUPPORTED = process.env.IS_ONBEHALF_TOKEN_SUPPORTED === 'true';
@@ -80,7 +80,7 @@ app.get('/zoom_oauth_callback', async (req, res) => {
 
     // Call Attendee API to create Zoom OAuth connection
     const response = await axios.post(
-      `${ATTENDEE_API_URL}/zoom_oauth_connections`,
+      `${ATTENDEE_API_URL}/api/v1/zoom_oauth_connections`,
       {
         authorization_code: code,
         redirect_uri: REDIRECT_URI,
