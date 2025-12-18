@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendee Managed Zoom OAuth Example</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      padding: 40px 32px;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: #888;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .sign-in-btn {
+      background: #2D8CFF;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.2s ease;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .sign-in-btn:hover {
+      background: #1a75e8;
+    }
+
+    .sign-in-btn:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>Attendee Managed Zoom OAuth Example</h3>
+    <br>
+    <a href="/zoom_oauth" class="sign-in-btn">Connect your Zoom account</a>
+  </div>
+</body>
+</html>

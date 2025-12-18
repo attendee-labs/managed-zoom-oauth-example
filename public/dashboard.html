@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Zoom OAuth Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .logout-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: white;
+      font-size: 14px;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 8px 16px;
+      border-radius: 6px;
+      transition: background 0.2s ease;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      margin-bottom: 20px;
+    }
+
+    .card:has(.user-info) {
+      padding: 20px 40px;
+    }
+
+    .user-info {
+      padding: 10px 0;
+    }
+
+    .user-id-label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .user-id {
+      font-size: 14px;
+      font-weight: 600;
+      color: #2D8CFF;
+      word-break: break-all;
+      font-family: 'Courier New', monospace;
+    }
+
+    .connection-data {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .connection-data summary {
+      font-size: 14px;
+      color: #666;
+      cursor: pointer;
+      padding: 10px 0;
+      user-select: none;
+    }
+
+    .connection-data summary:hover {
+      color: #2D8CFF;
+    }
+
+    .connection-data details[open] summary {
+      margin-bottom: 15px;
+    }
+
+    .connection-data pre {
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .success-badge {
+      display: inline-block;
+      background: #4caf50;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .disconnected-badge {
+      display: inline-block;
+      background: #f44336;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .connection-error {
+      background: #ffebee;
+      border: 1px solid #f44336;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+
+    .connection-error h3 {
+      color: #c62828;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .connection-error p {
+      color: #d32f2f;
+      font-size: 14px;
+      margin: 8px 0;
+      line-height: 1.5;
+    }
+
+    .connection-error .timestamp {
+      color: #666;
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .reconnect-btn {
+      background: #2D8CFF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background 0.3s ease;
+    }
+
+    .reconnect-btn:hover {
+      background: #1a75e8;
+    }
+
+    .bot-section h2 {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .bot-info {
+      background: #e3f2fd;
+      border-left: 4px solid #2D8CFF;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1565c0;
+    }
+
+    .bot-info a {
+      color: #1565c0;
+      text-decoration: underline;
+    }
+
+    .bot-info a:hover {
+      color: #0d47a1;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #2D8CFF;
+    }
+
+    .launch-btn {
+      background: #2D8CFF;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+
+    .launch-btn:hover {
+      background: #1a75e8;
+    }
+
+    .launch-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .message.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #4caf50;
+    }
+
+    .message.error {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #f44336;
+    }
+
+    .bot-details {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/logout" class="logout-btn">Logout</a>
+
+    <div class="card bot-section">
+      <h2>Launch Bot</h2>
+      <div id="botBehaviorInfo" class="bot-info"></div>
+      <form id="botForm">
+        <div class="form-group">
+          <label for="meetingUrl">Meeting URL</label>
+          <input
+            type="text"
+            id="meetingUrl"
+            name="meetingUrl"
+            placeholder="https://us06web.zoom.us/j/84315220467?pwd=..."
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="botName">Bot Name</label>
+          <input
+            type="text"
+            id="botName"
+            name="botName"
+            placeholder="My Bot"
+            required
+          />
+        </div>
+        <button type="submit" class="launch-btn" id="launchBtn">Launch Bot</button>
+      </form>
+      <div id="botMessage"></div>
+    </div>
+
+    <div class="card">
+      <div class="user-info">
+        <div id="connectionStatusBadge" class="success-badge">Zoom OAuth Connection</div>
+        <div class="user-id-label">Zoom User ID: <span class="user-id" id="userId">Loading...</span></div>
+      </div>
+
+      <div id="connectionErrorContainer"></div>
+
+      <div class="connection-data" id="connectionData">
+        <details>
+          <summary>Connection Details</summary>
+          <div id="dataContainer" class="loading">Loading connection data...</div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Fetch user data from API
+    fetch('/api/user')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Display user ID
+        document.getElementById('userId').textContent = data.userId;
+
+        const connectionData = data.connectionData;
+
+        // Check connection state and update badge
+        const statusBadge = document.getElementById('connectionStatusBadge');
+        const errorContainer = document.getElementById('connectionErrorContainer');
+
+        if (connectionData.state === 'disconnected') {
+          statusBadge.className = 'disconnected-badge';
+          statusBadge.textContent = 'Connection Disconnected';
+
+          // Display error information if available
+          if (connectionData.connection_failure_data) {
+            const errorData = connectionData.connection_failure_data;
+            const timestamp = errorData.timestamp ? new Date(errorData.timestamp).toLocaleString() : 'Unknown';
+
+            errorContainer.innerHTML = `
+              <div class="connection-error">
+                <h3>Connection Error</h3>
+                <p><strong>Error:</strong> ${errorData.error || 'Unknown error'}</p>
+                <p class="timestamp">Occurred at: ${timestamp}</p>
+                <button class="reconnect-btn" onclick="window.location.href='/zoom_oauth'">Reconnect to Zoom</button>
+              </div>
+            `;
+          } else {
+            errorContainer.innerHTML = `
+              <div class="connection-error">
+                <h3>Connection Disconnected</h3>
+                <p>Your Zoom OAuth connection has been disconnected.</p>
+                <button class="reconnect-btn" onclick="window.location.href='/zoom_oauth'">Reconnect to Zoom</button>
+              </div>
+            `;
+          }
+        }
+
+        // Display connection data as raw JSON
+        const dataContainer = document.getElementById('dataContainer');
+        dataContainer.classList.remove('loading');
+        dataContainer.innerHTML = `<pre>${JSON.stringify(connectionData, null, 2)}</pre>`;
+
+        // Display bot behavior info
+        const botBehaviorInfo = document.getElementById('botBehaviorInfo');
+
+        if (connectionData.is_onbehalf_token_supported) {
+          botBehaviorInfo.innerHTML += 'Bot will use an OnBehalf token, so it will not be able to join the meeting until you join. This token will be required after February 23, 2026, see <a href="https://developers.zoom.us/blog/transition-to-obf-token-meetingsdk-apps" target="_blank">here for details</a>.';
+        }
+        if (connectionData.is_local_recording_token_supported) {
+          if (botBehaviorInfo.innerHTML) {
+            botBehaviorInfo.innerHTML += '<br><br>';
+          }
+          botBehaviorInfo.innerHTML += 'Bot will use a local recording token, if you are the meeting host. This means the bot will not need to ask permission to record the meeting and can bypass the waiting room.';
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('userId').textContent = 'Error loading user data';
+        document.getElementById('dataContainer').textContent = 'Failed to load connection data';
+      });
+
+    // Handle bot launch form submission
+    document.getElementById('botForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const meetingUrl = document.getElementById('meetingUrl').value;
+      const botName = document.getElementById('botName').value;
+      const launchBtn = document.getElementById('launchBtn');
+      const messageDiv = document.getElementById('botMessage');
+
+      // Disable button and show loading state
+      launchBtn.disabled = true;
+      launchBtn.textContent = 'Launching...';
+      messageDiv.innerHTML = '';
+
+      try {
+        const response = await fetch('/api/launch-bot', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            meeting_url: meetingUrl,
+            bot_name: botName
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to launch bot');
+        }
+
+        // Show success message
+        messageDiv.innerHTML = `
+          <div class="message success">
+            <strong>Bot launched successfully!</strong>
+            <div class="bot-details">Bot ID: ${data.id}</div>
+          </div>
+        `;
+
+        // Clear form
+        document.getElementById('botForm').reset();
+
+      } catch (error) {
+        console.error('Error launching bot:', error);
+        messageDiv.innerHTML = `
+          <div class="message error">
+            <strong>Error:</strong> ${error.message}
+          </div>
+        `;
+      } finally {
+        // Re-enable button
+        launchBtn.disabled = false;
+        launchBtn.textContent = 'Launch Bot';
+      }
+    });
+  </script>
+</body>
+</html>
