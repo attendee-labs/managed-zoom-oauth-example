@@ -1,6 +1,10 @@
 # Attendee Managed Zoom OAuth Example
 
-A simple Node.js web application demonstrating how to use Attendee's managed zoom oauth feature.
+A simple Node.js web application demonstrating how to use Attendee's managed Zoom OAuth feature.
+
+This feature handles the process of managing Zoom OAuth connections and tokens for you. Currently it supports two capabilities:
+1. Local recording token - This token allows the bot to record the meeting without asking permission and bypassing the waiting room. The meeting host must have authorized the app.
+2. Onbehalf token - This token associates the bot with a user in the meeting. The bot will not be able to join the meeting until this user joins. It will soon be required for any external meeting. See [here](https://developers.zoom.us/blog/transition-to-obf-token-meetingsdk-apps/) for details. 
 
 ## Setup
 
@@ -88,7 +92,7 @@ A simple Node.js web application demonstrating how to use Attendee's managed zoo
    5. If you enabled the onbehalf token, the bot will be associated your user in the Zoom client. It will not be able to join the meeting until you join. The onbehalf token will be required after February 23, 2026, see [here for details](https://developers.zoom.us/blog/transition-to-obf-token-meetingsdk-apps/).
 
 8. **Test disconnecting the Zoom App:**
-  1. Goto https://marketplace.zoom.us/user/installed and find your app.
-  2. Remove it from your account.
-  3. Launch another bot.
-  4. Refresh the dashboard after 30 seconds and you should see that the Zoom OAuth connection state is disconnected. The bot will still be able to join the meeting, but it will not be able to generate any tokens.
+   1. Goto https://marketplace.zoom.us/user/installed and find your app.
+   2. Remove it from your account.
+   3. Launch another bot.
+   4. Refresh the dashboard after 30 seconds and you should see that the Zoom OAuth connection state is disconnected. The bot will still be able to join the meeting, but it will not be able to generate any tokens.
