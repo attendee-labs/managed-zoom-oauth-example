@@ -18,6 +18,8 @@ const ATTENDEE_API_KEY = process.env.ATTENDEE_API_KEY;
 const REDIRECT_URI = process.env.REDIRECT_URI || `http://localhost:${PORT}/zoom_oauth_callback`;
 const ATTENDEE_API_URL = process.env.ATTENDEE_API_URL || 'https://staging.attendee.dev/api/v1';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'your-secret-key-change-in-production';
+const IS_LOCAL_RECORDING_TOKEN_SUPPORTED = process.env.IS_LOCAL_RECORDING_TOKEN_SUPPORTED === 'true';
+const IS_ONBEHALF_TOKEN_SUPPORTED = process.env.IS_ONBEHALF_TOKEN_SUPPORTED === 'true';
 
 // Initialize Express app
 const app = express();
@@ -82,8 +84,8 @@ app.get('/zoom_oauth_callback', async (req, res) => {
       {
         authorization_code: code,
         redirect_uri: REDIRECT_URI,
-        is_local_recording_token_supported: false,
-        is_onbehalf_token_supported: true
+        is_local_recording_token_supported: IS_LOCAL_RECORDING_TOKEN_SUPPORTED,
+        is_onbehalf_token_supported: IS_ONBEHALF_TOKEN_SUPPORTED
       },
       {
         headers: {
@@ -181,7 +183,7 @@ app.post('/api/launch-bot', async (req, res) => {
 
     // Call Attendee API to create bot
     const response = await axios.post(
-      `${ATTENDEE_API_URL}/bots`,
+      `${ATTENDEE_API_URL}/api/v1/bots`,
       {
         meeting_url: meeting_url,
         bot_name: bot_name,

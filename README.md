@@ -1,166 +1,95 @@
-# Managed Zoom OAuth Example
+# Attendee Managed Zoom OAuth Example
 
-A simple Node.js Express application that demonstrates Attendee's managed Zoom OAuth feature. This app allows users to sign in with their Zoom account and stores the OAuth connection in a local JSON file database.
+A simple Node.js web application demonstrating how to use Attendee's managed zoom oauth feature.
 
-## Features
+## Setup
 
-- Sign-in screen with Zoom OAuth integration
-- Attendee API integration for managed OAuth
-- Simple JSON file-based database
-- Session management for authenticated users
-- Dashboard displaying Zoom user ID and connection details
-- Clean, modern UI
-
-## Prerequisites
-
-- Node.js (v14 or higher)
-- npm
-- Zoom OAuth app credentials
-- Attendee API key
-
-## Setup Instructions
-
-### 1. Install Dependencies
-
-```bash
-npm install
-```
-
-### 2. Configure Environment Variables
-
-Copy the example environment file:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` and fill in your credentials:
-
-```env
-# Zoom OAuth App Credentials
-ZOOM_CLIENT_ID=your_zoom_client_id_here
-ZOOM_CLIENT_SECRET=your_zoom_client_secret_here
-ZOOM_OAUTH_APP_ID=your_zoom_oauth_app_id_here
-
-# Attendee API Credentials
-ATTENDEE_API_KEY=your_attendee_api_key_here
-
-# App Configuration
-PORT=3000
-REDIRECT_URI=http://localhost:3000/zoom_oauth_callback
-SESSION_SECRET=your_random_session_secret_here
-
-# Attendee API URL
-ATTENDEE_API_URL=https://staging.attendee.dev/api/v1
-```
-
-### 3. Configure Zoom OAuth App
-
-Make sure your Zoom OAuth app is configured with the correct redirect URI:
-
-- Redirect URI: `http://localhost:3000/zoom_oauth_callback`
-
-### 4. Run the Application
-
-```bash
-npm start
-```
-
-The server will start on `http://localhost:3000`
-
-## Usage
-
-1. Navigate to `http://localhost:3000` in your browser
-2. Click the "Sign in with Zoom" button
-3. You'll be redirected to Zoom's OAuth authorization page
-4. Grant the requested permissions
-5. After successful authorization, you'll be redirected back to the app
-6. The app will:
-   - Exchange the authorization code for tokens via Attendee API
-   - Save the connection data to the local JSON database
-   - Sign you in and redirect to the dashboard
-7. The dashboard displays your Zoom user ID and connection details
-
-## Project Structure
-
-```
-managed-zoom-oauth-example/
-├── server.js              # Main Express server
-├── db.js                  # Simple JSON file database module
-├── package.json           # Node.js dependencies
-├── .env.example           # Environment variable template
-├── .env                   # Your actual environment variables (not in git)
-├── data/                  # Database directory (auto-created)
-│   └── users.json         # User data storage (auto-created)
-└── public/                # Static files
-    ├── signin.html        # Sign-in page
-    └── dashboard.html     # Dashboard page
-```
-
-## API Endpoints
-
-### Public Endpoints
-
-- `GET /` - Sign-in page
-- `GET /zoom_oauth` - Initiates Zoom OAuth flow
-- `GET /zoom_oauth_callback` - OAuth callback handler
-
-### Protected Endpoints
-
-- `GET /dashboard` - User dashboard (requires authentication)
-- `GET /api/user` - Get current user data (requires authentication)
-- `GET /logout` - Logout user
-
-## How It Works
-
-1. **OAuth Initiation**: When a user clicks "Sign in with Zoom", they're redirected to Zoom's OAuth authorization page
-
-2. **OAuth Callback**: After the user grants permissions, Zoom redirects back to `/zoom_oauth_callback` with an authorization code
-
-3. **Attendee API Call**: The app sends the authorization code to Attendee's managed OAuth API:
-   ```javascript
-   POST https://staging.attendee.dev/api/v1/zoom_oauth_connections
-   Headers: Authorization: Token {ATTENDEE_API_KEY}
-   Body: {
-     authorization_code: code,
-     redirect_uri: REDIRECT_URI,
-     is_local_recording_token_supported: false,
-     is_onbehalf_token_supported: true
-   }
+1. **Install dependencies:**
+   ```bash
+   npm install
    ```
 
-4. **Store Connection**: The response contains a `user_id` and connection details, which are saved to the local database
+2. **Create a Zoom OAuth App:**
+1. Go to the [Zoom Developer Portal](https://marketplace.zoom.us/user/build) and create a new General app.
 
-5. **User Session**: The user is signed in by storing their `user_id` in the session
+2. On the sidebar select 'Basic Information'.
+3. For the OAuth redirect URL, enter `http://localhost:5005/zoom_oauth_callback`.
+4. On the sidebar select 'Features -> Embed'.
+5. Toggle 'Meeting SDK' to on.
+6. On the sidebar select 'Scopes'.
+7. Add the following scopes if you want to use the local recording token:
+    - `user:read:user`
+    - `meeting:read:list_meetings`
+    - `meeting:read:local_recording_token`
+8. Add the following scope if you want to use the onbehalf token:
+    - `user:read:token`
 
-6. **Dashboard**: The user is redirected to a dashboard showing their Zoom user ID and connection details
+3. **Configure environment variables:**
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` and fill in as follows:
+   - `ZOOM_CLIENT_ID` and `ZOOM_CLIENT_SECRET` from your Zoom OAuth App
+   - `IS_LOCAL_RECORDING_TOKEN_SUPPORTED` and `IS_ONBEHALF_TOKEN_SUPPORTED` set based on your Zoom OAuth App's scopes. At least one must be true.
+   - `ATTENDEE_API_KEY` from your Attendee account
+   - `ATTENDEE_API_URL` for the Attendee instance you are using (defaults to https://app.attendee.com for the hosted instance)
 
-## Database
+4. **Set up ngrok for webhook development:**
+   
+   Ngrok creates a secure tunnel to your localhost so Attendee can send webhooks to your local application.
+   
+   **Install ngrok:**
+   
+   For macOS with Homebrew:
+   ```bash
+   brew install ngrok
+   ```
+   
+   For Ubuntu/Debian:
+   ```bash
+   snap install ngrok
+   ```
+   
+   Or download directly from [ngrok.com](https://ngrok.com/download)
+   
+   **Start the ngrok tunnel:**
+   ```bash
+   ngrok http 5005
+   ```
+   
+   Copy the generated HTTPS URL (e.g., `https://abc123.ngrok-free.app`) - you'll need this for webhook configuration.
 
-This app uses a simple JSON file-based database that stores user data in `data/users.json`. The database structure:
+5. **Configure Attendee webhooks:**
+   
+   In your Attendee dashboard:
+   
+   1. Go to **Settings → Webhooks**
+   2. Click **"Create Webhook"**
+   3. Enter your ngrok URL + `/attendee-webhook` (e.g., `https://abc123.ngrok-free.app/attendee-webhook`)
+   4. Select these triggers:
+      - `zoom_oauth_connection.state_change`
+   5. Click **"Create"** to save the webhook
 
-```json
-{
-  "zoom_user_id_1": {
-    "id": "connection_id",
-    "user_id": "zoom_user_id_1",
-    "zoom_oauth_app_id": "app_id",
-    "is_onbehalf_token_supported": true,
-    "is_local_recording_token_supported": false,
-    "createdAt": "2025-01-01T00:00:00.000Z",
-    "updatedAt": "2025-01-01T00:00:00.000Z"
-  }
-}
-```
+6. **Run the application:**
+   ```bash
+   npm start
+   ```
+   
+   For development with auto-restart:
+   ```bash
+   npm run dev
+   ```
 
-## Security Notes
+7. **Use the application:**
+   1. Open http://localhost:5005 in your browser
+   2. Connect your Zoom account
+   3. Launch a bot
+   4. If you enabled local recording token, the bot will be able to join the meeting and record the meeting without asking permission.
+   5. If you enabled the onbehalf token, the bot will be associated your user in the Zoom client. It will not be able to join the meeting until you join. The onbehalf token will be required after February 23, 2026, see [here for details](https://developers.zoom.us/blog/transition-to-obf-token-meetingsdk-apps/).
 
-- In production, use HTTPS and set `cookie.secure: true` in session configuration
-- Use a strong, random `SESSION_SECRET`
-- Never commit `.env` file to version control
-- Store credentials securely
-- Consider using a proper database for production use
-
-## License
-
-ISC
+8. **Test disconnecting the Zoom App:**
+  1. Goto https://marketplace.zoom.us/user/installed and find your app.
+  2. Remove it from your account.
+  3. Launch another bot.
+  4. Refresh the dashboard after 30 seconds and you should see that the Zoom OAuth connection state is disconnected. The bot will still be able to join the meeting, but it will not be able to generate any tokens.
