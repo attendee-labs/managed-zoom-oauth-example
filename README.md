@@ -63,7 +63,16 @@ This feature handles the process of managing Zoom OAuth connections and tokens f
    
    Copy the generated HTTPS URL (e.g., `https://abc123.ngrok-free.app`) - you'll need this for webhook configuration.
 
-5. **Configure Attendee webhooks:**
+5. **Add Zoom credentials to Attendee:**
+   
+   In your Attendee dashboard:
+   
+   1. Go to **Settings → Credentials**
+   2. Under Zoom OAuth App Credentials, click **"Add OAuth App"**
+   3. Enter your Zoom Client ID, Client Secret and Webhook Secret (Only needed if you are using the local recording token)
+   4. Click **"Save"**
+
+6. **Configure Attendee webhooks:**
    
    In your Attendee dashboard:
    
@@ -74,7 +83,7 @@ This feature handles the process of managing Zoom OAuth connections and tokens f
       - `zoom_oauth_connection.state_change`
    5. Click **"Create"** to save the webhook
 
-6. **Run the application:**
+7. **Run the application:**
    ```bash
    npm start
    ```
@@ -84,14 +93,14 @@ This feature handles the process of managing Zoom OAuth connections and tokens f
    npm run dev
    ```
 
-7. **Use the application:**
+8. **Use the application:**
    1. Open http://localhost:5005 in your browser
    2. Connect your Zoom account
    3. Launch a bot
    4. If you enabled local recording token, the bot will be able to join the meeting and record the meeting without asking permission.
    5. If you enabled the onbehalf token, the bot will be associated your user in the Zoom client. It will not be able to join the meeting until you join. The onbehalf token will be required after February 23, 2026, see [here for details](https://developers.zoom.us/blog/transition-to-obf-token-meetingsdk-apps/).
 
-8. **Test disconnecting the Zoom App:**
+9. **Test disconnecting the Zoom App:**
    1. Goto https://marketplace.zoom.us/user/installed and find your app.
    2. Remove it from your account.
    3. Launch another bot.
