@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Zoom OAuth Demo</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      padding: 30px 40px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #333;
+    }
+
+    .logout-btn {
+      background: #f44336;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: #d32f2f;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      margin-bottom: 20px;
+    }
+
+    .user-info {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .user-icon {
+      font-size: 80px;
+      margin-bottom: 20px;
+    }
+
+    .user-id-label {
+      font-size: 14px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .user-id {
+      font-size: 24px;
+      font-weight: 600;
+      color: #2D8CFF;
+      word-break: break-all;
+      font-family: 'Courier New', monospace;
+    }
+
+    .connection-data {
+      margin-top: 30px;
+      padding-top: 30px;
+      border-top: 1px solid #eee;
+    }
+
+    .connection-data h2 {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .data-item {
+      margin-bottom: 12px;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 6px;
+    }
+
+    .data-label {
+      font-size: 12px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+    }
+
+    .data-value {
+      font-size: 14px;
+      color: #333;
+      font-family: 'Courier New', monospace;
+      word-break: break-all;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .success-badge {
+      display: inline-block;
+      background: #4caf50;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .bot-section h2 {
+      font-size: 20px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      font-size: 14px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #2D8CFF;
+    }
+
+    .launch-btn {
+      background: #2D8CFF;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.3s ease;
+    }
+
+    .launch-btn:hover {
+      background: #1a75e8;
+    }
+
+    .launch-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .message.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #4caf50;
+    }
+
+    .message.error {
+      background: #ffebee;
+      color: #c62828;
+      border: 1px solid #f44336;
+    }
+
+    .bot-details {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f5f5f5;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Dashboard</h1>
+      <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+
+    <div class="card">
+      <div class="user-info">
+        <div class="success-badge">Connected</div>
+        <div class="user-icon">👤</div>
+        <div class="user-id-label">Your Zoom User ID</div>
+        <div class="user-id" id="userId">Loading...</div>
+      </div>
+
+      <div class="connection-data" id="connectionData">
+        <h2>Connection Details</h2>
+        <div id="dataContainer" class="loading">Loading connection data...</div>
+      </div>
+    </div>
+
+    <div class="card bot-section">
+      <h2>Launch Bot</h2>
+      <form id="botForm">
+        <div class="form-group">
+          <label for="meetingUrl">Meeting URL</label>
+          <input
+            type="text"
+            id="meetingUrl"
+            name="meetingUrl"
+            placeholder="https://us06web.zoom.us/j/84315220467?pwd=..."
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="botName">Bot Name</label>
+          <input
+            type="text"
+            id="botName"
+            name="botName"
+            placeholder="My Bot"
+            required
+          />
+        </div>
+        <button type="submit" class="launch-btn" id="launchBtn">Launch Bot</button>
+      </form>
+      <div id="botMessage"></div>
+    </div>
+  </div>
+
+  <script>
+    // Fetch user data from API
+    fetch('/api/user')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Display user ID
+        document.getElementById('userId').textContent = data.userId;
+
+        // Display connection data
+        const dataContainer = document.getElementById('dataContainer');
+        dataContainer.innerHTML = '';
+        dataContainer.classList.remove('loading');
+
+        const connectionData = data.connectionData;
+
+        // Display relevant fields
+        const fieldsToShow = [
+          { key: 'user_id', label: 'User ID' },
+          { key: 'id', label: 'Connection ID' },
+          { key: 'zoom_oauth_app_id', label: 'Zoom OAuth App ID' },
+          { key: 'is_onbehalf_token_supported', label: 'On-Behalf Token Supported' },
+          { key: 'is_local_recording_token_supported', label: 'Local Recording Token Supported' },
+          { key: 'createdAt', label: 'Created At' }
+        ];
+
+        fieldsToShow.forEach(field => {
+          if (connectionData[field.key] !== undefined) {
+            const item = document.createElement('div');
+            item.className = 'data-item';
+            item.innerHTML = `
+              <div class="data-label">${field.label}</div>
+              <div class="data-value">${connectionData[field.key]}</div>
+            `;
+            dataContainer.appendChild(item);
+          }
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('userId').textContent = 'Error loading user data';
+        document.getElementById('dataContainer').textContent = 'Failed to load connection data';
+      });
+
+    // Handle bot launch form submission
+    document.getElementById('botForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const meetingUrl = document.getElementById('meetingUrl').value;
+      const botName = document.getElementById('botName').value;
+      const launchBtn = document.getElementById('launchBtn');
+      const messageDiv = document.getElementById('botMessage');
+
+      // Disable button and show loading state
+      launchBtn.disabled = true;
+      launchBtn.textContent = 'Launching...';
+      messageDiv.innerHTML = '';
+
+      try {
+        const response = await fetch('/api/launch-bot', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            meeting_url: meetingUrl,
+            bot_name: botName
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to launch bot');
+        }
+
+        // Show success message
+        messageDiv.innerHTML = `
+          <div class="message success">
+            <strong>Bot launched successfully!</strong>
+            <div class="bot-details">Bot ID: ${data.id}</div>
+          </div>
+        `;
+
+        // Clear form
+        document.getElementById('botForm').reset();
+
+      } catch (error) {
+        console.error('Error launching bot:', error);
+        messageDiv.innerHTML = `
+          <div class="message error">
+            <strong>Error:</strong> ${error.message}
+          </div>
+        `;
+      } finally {
+        // Re-enable button
+        launchBtn.disabled = false;
+        launchBtn.textContent = 'Launch Bot';
+      }
+    });
+  </script>
+</body>
+</html>
