@@ -8,6 +8,8 @@ This feature handles the process of managing Zoom OAuth connections and tokens f
 
 ## Setup
 
+See [here](https://www.youtube.com/watch?v=mF4TLkPCtN0) for a video showing these steps.
+
 1. **Install dependencies:**
    ```bash
    npm install
