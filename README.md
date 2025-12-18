@@ -25,7 +25,7 @@ This feature handles the process of managing Zoom OAuth connections and tokens f
       - `meeting:read:list_meetings`
       - `meeting:read:local_recording_token`
       - `user:read:zak`
-   8. Add the following scope if you want to use the onbehalf token:
+   8. Add the following scopes if you want to use the onbehalf token:
       - `user:read:token`
       - `user:read:zak`
 
