@@ -73,10 +73,24 @@ See [here](https://www.youtube.com/watch?v=mF4TLkPCtN0) for a video showing thes
    
    1. Go to **Settings → Credentials**
    2. Under Zoom OAuth App Credentials, click **"Add OAuth App"**
-   3. Enter your Zoom Client ID, Client Secret and Webhook Secret (Only needed if you are using the local recording token)
+   3. Enter your Zoom Client ID, Client Secret and Webhook Secret (*Webhook secret is only needed if you are using the local recording token*)
    4. Click **"Save"**
 
-6. **Configure Attendee webhooks:**
+6. **Add Webhook to Zoom App:**
+
+  *Note: These steps are only needed if you are using the local recording token.*
+
+  1. In the Attendee dashboard, click the **Webhook url** button on your newly created Zoom OAuth App credentials.
+  2. Go back to the Zoom Developer Portal and go to **Features -> Access** in the sidebar.
+  3. Toggle **Event subscription** and click **Add new Event Subscription**.
+  4. For the **Event notification endpoint URL**, enter the webhook url you copied earlier from the Attendee dashboard.
+  5. Select these event types:
+    - `Meeting has been created`
+    - `User's profile info has been updated`
+  6. Click **"Save"**
+  7. If you are creating a production app, validate the webhook by clicking the **Validate** button.
+
+7. **Configure Attendee webhooks:**
    
    In your Attendee dashboard:
    
@@ -87,7 +101,7 @@ See [here](https://www.youtube.com/watch?v=mF4TLkPCtN0) for a video showing thes
       - `zoom_oauth_connection.state_change`
    5. Click **"Create"** to save the webhook
 
-7. **Run the application:**
+8. **Run the application:**
    ```bash
    npm start
    ```
@@ -97,14 +111,14 @@ See [here](https://www.youtube.com/watch?v=mF4TLkPCtN0) for a video showing thes
    npm run dev
    ```
 
-8. **Use the application:**
+9. **Use the application:**
    1. Open http://localhost:5005 in your browser
    2. Connect your Zoom account
    3. Launch a bot
    4. If you enabled local recording token, the bot will be able to join the meeting and record the meeting without asking permission.
    5. If you enabled the onbehalf token, the bot will be associated your user in the Zoom client. It will not be able to join the meeting until you join. The onbehalf token will be required after February 23, 2026, see [here for details](https://developers.zoom.us/blog/transition-to-obf-token-meetingsdk-apps/).
 
-9. **Test disconnecting the Zoom App:**
+10. **Test disconnecting the Zoom App:**
    1. Goto https://marketplace.zoom.us/user/installed and find your app.
    2. Remove it from your account.
    3. Launch another bot.
