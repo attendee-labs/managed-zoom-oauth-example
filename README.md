@@ -73,7 +73,7 @@ See [here](https://www.youtube.com/watch?v=mF4TLkPCtN0) for a video showing thes
    
    1. Go to **Settings → Credentials**
    2. Under Zoom OAuth App Credentials, click **"Add OAuth App"**
-   3. Enter your Zoom Client ID, Client Secret and Webhook Secret (*Webhook secret is only needed if you are using the local recording token*)
+   3. Enter your Zoom Client ID, Client Secret and Webhook Secret *Note: Webhook secret is only needed if you are using the local recording token*
    4. Click **"Save"**
 
 6. **Add Webhook to Zoom App:**
