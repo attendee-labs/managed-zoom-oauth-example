@@ -77,18 +77,18 @@ See [here](https://www.youtube.com/watch?v=mF4TLkPCtN0) for a video showing thes
    4. Click **"Save"**
 
 6. **Add Webhook to Zoom App:**
-
-  *Note: These steps are only needed if you are using the local recording token.*
-
-  1. In the Attendee dashboard, click the **Webhook url** button on your newly created Zoom OAuth App credentials.
-  2. Go back to the Zoom Developer Portal and go to **Features -> Access** in the sidebar.
-  3. Toggle **Event subscription** and click **Add new Event Subscription**.
-  4. For the **Event notification endpoint URL**, enter the webhook url you copied earlier from the Attendee dashboard.
-  5. Select these event types:
-    - `Meeting has been created`
-    - `User's profile info has been updated`
-  6. Click **"Save"**
-  7. If you are creating a production app, validate the webhook by clicking the **Validate** button.
+   
+   *Note: These steps are only needed if you are using the local recording token.*
+   
+   1. In the Attendee dashboard, click the **Webhook url** button on your newly created Zoom OAuth App credentials.
+   2. Go back to the Zoom Developer Portal and go to **Features -> Access** in the sidebar.
+   3. Toggle **Event subscription** and click **Add new Event Subscription**.
+   4. For the **Event notification endpoint URL**, enter the webhook url you copied earlier from the Attendee dashboard.
+   5. Select these event types:
+      - `Meeting has been created`
+      - `User's profile info has been updated`
+   6. Click **"Save"**
+   7. If you are creating a production app, validate the webhook by clicking the **Validate** button.
 
 7. **Configure Attendee webhooks:**
    
