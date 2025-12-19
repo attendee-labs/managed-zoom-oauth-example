@@ -119,7 +119,7 @@ See [here](https://www.youtube.com/watch?v=mF4TLkPCtN0) for a video showing thes
    5. If you enabled the onbehalf token, the bot will be associated your user in the Zoom client. It will not be able to join the meeting until you join. The onbehalf token will be required after February 23, 2026, see [here for details](https://developers.zoom.us/blog/transition-to-obf-token-meetingsdk-apps/).
 
 10. **Test disconnecting the Zoom App:**
-   1. Goto https://marketplace.zoom.us/user/installed and find your app.
-   2. Remove it from your account.
-   3. Launch another bot.
-   4. Refresh the dashboard after 30 seconds and you should see that the Zoom OAuth connection state is disconnected. The bot will still be able to join the meeting, but it will not be able to generate any tokens.
+    1. Goto https://marketplace.zoom.us/user/installed and find your app.
+    2. Remove it from your account.
+    3. Launch another bot.
+    4. Refresh the dashboard after 30 seconds and you should see that the Zoom OAuth connection state is disconnected. The bot will still be able to join the meeting, but it will not be able to generate any tokens.
